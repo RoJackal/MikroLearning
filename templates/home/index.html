@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Welcome to MikroLearning</h1>
+<p>This is your platform for Python courses.</p>
+<h3>Popular Courses:</h3>
+<ul>
+    {% for course in popular_courses %}
+    <li>{{ course.title }} ({{ course.enrollment_count }} students)</li>
+    {% empty %}
+    <li>No courses available yet.</li>
+    {% endfor %}
+</ul>
+{% endblock %}
