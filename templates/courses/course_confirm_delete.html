@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-lg mx-auto bg-white dark:bg-slate-800 p-8 rounded-xl shadow-lg border border-red-500">
+    <h2 class="text-2xl font-bold text-red-600 mb-4">Confirmă Ștergerea</h2>
+    <p class="mb-6 text-slate-700 dark:text-slate-200">Ești sigur că vrei să ștergi cursul: <strong>"{{ object.title }}"</strong>?</p>
+    <form method="post" class="flex space-x-4">
+        {% csrf_token %}
+        <button type="submit" class="bg-red-600 hover:bg-red-800 text-white px-6 py-2 rounded font-bold transition">Da, șterge-l</button>
+        <a href="{% url 'course_list' %}" class="bg-slate-500 hover:bg-slate-600 text-white px-6 py-2 rounded font-bold transition">Anulează</a>
+    </form>
+</div>
+{% endblock %}

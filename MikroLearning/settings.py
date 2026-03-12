@@ -3,7 +3,9 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 load_dotenv()
+
 BASE_DIR = Path(__file__).resolve().parent.parent
+
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-default-key')
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 ALLOWED_HOSTS = []
@@ -38,7 +40,7 @@ TEMPLATES = [
 				'django.template.context_processors.request',
 				'django.contrib.auth.context_processors.auth',
 				'django.contrib.messages.context_processors.messages',
-				'courses.context_processors.popular_courses',
+				'MikroLearning.context_processors.popular_courses',  # Add this
 				],
 			},
 		},
@@ -58,7 +60,7 @@ AUTH_PASSWORD_VALIDATORS = [
 	{ 'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator' },
 	{ 'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator' },
 	]
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en-us'  # Engleza
 TIME_ZONE = 'Europe/Bucharest'
 USE_I18N = True
 USE_TZ = True
@@ -66,8 +68,11 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
-LOGIN_REDIRECT_URL = 'course-list'
+# AUTH
+LOGIN_REDIRECT_URL = 'course_list'
+LOGOUT_REDIRECT_URL = 'course_list'
 LOGOUT_REDIRECT_URL = 'login'
+# EMAIL (course requirement)
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587

@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <a href="{% url 'course_list' %}" class="text-primary-500 hover:text-primary-900 mb-4 inline-block">&larr; Inapoi la lista</a>
+    <h1 class="text-4xl font-black text-slate-900 dark:text-white mb-4">{{ course.title }}</h1>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="md:col-span-2">
+            <h2 class="text-2xl font-bold mb-4 border-b pb-2">Descriere Curs</h2>
+            <p class="whitespace-pre-line text-slate-700 dark:text-slate-300 mb-6">{{ course.description }}</p>
+            <h2 class="text-2xl font-bold mb-4 border-b pb-2">Agenda MTCNA</h2>
+            <ul class="space-y-2 text-slate-700 dark:text-slate-300">
+                <li><strong>Modulul 1:</strong> Introducere MikroTik si RouterOS [cite: 3]</li>
+                <li><strong>Modulul 2:</strong> DHCP Server si Client [cite: 3]</li>
+                <li><strong>Modulul 3:</strong> Bridging Concept [cite: 3]</li>
+                <li><strong>Modulul 4:</strong> Routing si Static Routing [cite: 3]</li>
+                <li><strong>Modulul 5:</strong> Wireless a/b/g/n/ac [cite: 3]</li>
+                <li><strong>Modulul 6:</strong> Firewall si NAT [cite: 3]</li>
+                <li><strong>Modulul 7:</strong> QoS si Simple Queues [cite: 3]</li>
+                <li><strong>Modulul 8:</strong> Tunnels PPP si PPTP [cite: 3]</li>
+                <li><strong>Modulul 9:</strong> Unelte RouterOS si Monitoring [cite: 3]</li>
+            </ul>
+        </div>
+        <div class="bg-slate-100 dark:bg-slate-700 p-6 rounded-xl h-fit shadow-inner">
+            <p class="text-3xl font-bold text-primary-500 mb-4">{{ course.price }} RON</p>
+            <p class="text-sm mb-2"><strong>Trainer:</strong> {{ course.instructor.username }}</p>
+            <p class="text-sm mb-6"><strong>Perioada:</strong> {{ course.start_date }} - {{ course.end_date }}</p>
+            {% if user.is_authenticated %}
+            <form action="{% url 'course_enroll' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="course" value="{{ course.id }}">
+                <button type="submit" class="w-full bg-primary-500 hover:bg-primary-900 text-white font-bold py-3 rounded-lg transition">Inscrie-te Acum</button>
+            </form>
+            {% else %}
+            <a href="{% url 'login' %}" class="block text-center bg-slate-500 text-white font-bold py-3 rounded-lg">Login pentru Inscriere</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}  

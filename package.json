@@ -1,0 +1,30 @@
+{
+  "name": "mikrolearning",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build:css": "./tailwindcss.exe -i ./static/src/styles.css -o ./static/dist/styles.css --minify",
+    "watch:css": "./tailwindcss.exe -i ./static/src/styles.css -o ./static/dist/styles.css --watch"
+  }, 
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RoJackal/MikroLearning.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/RoJackal/MikroLearning/issues"
+  },
+  "homepage": "https://github.com/RoJackal/MikroLearning#readme",
+  "devDependencies": {
+    "autoprefixer": "^10.4.27",
+    "postcss": "^8.5.8",
+    "tailwindcss": "^4.2.1"
+  },
+  "dependencies": {
+    "python": "^0.0.4"
+  }
+}

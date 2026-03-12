@@ -1,11 +1,29 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% block content %}
-<h2>Available Courses</h2>
-<ul>
+<div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-extrabold text-primary-500">Cursuri MikroTik Disponibile</h1>
+    {% if user.is_authenticated %}
+    <a href="{% url 'course_add' %}" class="bg-green-600 text-white px-4 py-2 rounded shadow hover:bg-green-700 transition">+ Adauga Curs</a>
+    {% endif %}
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
     {% for course in courses %}
-    <li>{{ course.title }} - ${{ course.price }}</li>
+    <div class="bg-slate-100 dark:bg-slate-700 p-6 rounded-lg border-l-4 border-primary-500 shadow-sm">
+        <h2 class="text-xl font-bold mb-2">{{ course.title }}</h2>
+        <p class="text-slate-600 dark:text-slate-300 mb-4">{{ course.description|truncatewords:25 }}</p>
+        <div class="flex justify-between items-center">
+            <span class="font-bold text-lg text-primary-500">{{ course.price }} RON</span>
+            <div class="space-x-2">
+                <a href="{% url 'course_detail' course.pk %}" class="text-primary-500 hover:underline">Detalii</a>
+                {% if user.is_authenticated and user == course.instructor %}
+                <a href="{% url 'course_edit' course.pk %}" class="text-yellow-500 hover:underline">Editeaza</a>
+                <a href="{% url 'course_delete' course.pk %}" class="text-red-500 hover:underline">Sterge</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
     {% empty %}
-    <li>No courses found.</li>
+    <p>Nu exista cursuri active momentan.</p>
     {% endfor %}
-</ul>
+</div>
 {% endblock %}
