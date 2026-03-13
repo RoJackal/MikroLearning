@@ -1,0 +1,135 @@
+- MTCNA
+-- "Certificarea MTCNA
+
+MikroTik Certified Network Associate
+
+Agenda cursului cuprinde urmatoarele subiecte:
+
+Modulul 1 – Introducere MikroTik si RouterOS
+
+Modulul 2 – DHCP Server, Client precum si modurile ARP
+
+Modulul 3 – Bridging, descriere concept, inclusiv Wireless Bridge
+
+Modulul 4 – Routing , descriere concept, static routing
+
+Modulul 5 – Wireless, concept a/b/g/n/ac, linkuri simple wlan, ap mode si station mode, unelte pentru monitorizare, access list si connect list.
+
+Modulul 6 – Firewall, principii, Connection tracking si states, structura chainurilor si tipuri de actiuni, address list, source NAT si destination NAT.
+
+Modulul 7 – QoS Despre Simple queues, Target, Destinations, Max-Limit si Limit-at precum si Traffic Bursting, concept PCQ, un singur simple queue pentru intreaga retea.
+
+Modulul 8 – Tunnels PPP settings, IP pool, Secure Local Network, Point-to-Point addresses, Retele remote securizate PPTP client/server, SSTP Client.
+
+Modulul 9 – Unelte ale RouterOS, e-mail, Netwatch, Ping, Traceroute, Profiler. Monitorizare pe interfete, graph-uri, Torch si SNMP, dar si o scurta descriere a The Dude. System Logs si support.
+
+Cerinte Cursanti
+Acest tip de certificare este recomandat inginerilor si tehnicienilor care administreaza sau implementeaza retele de calculatoare din gama Small Business. Agenda cursului cuprinde urmatoarele noua module dezvoltate pe durata a 3 zile de curs.
+
+Info
+La fiecare dintre cele noua module, prezentarea teoretica va fi aplicata in cadrul laboratoarelor, aproape 40 in total. Pentru detalii suplimentare referitoare la certificarea MTCNA, va invitam sa consultati curricula oficiala MikroTik la adresa: https://www.mikrotik.com/download/pdf/MTCNA_Outline.pdf."
+
+- MTCNA (Online)
+-- "Cursul MTCNA Online (fara examen de certificare oficiala)
+
+MikroTik Certified Network Associate
+
+Agenda cursului cuprinde urmatoarele subiecte:
+
+Modulul 1 – Introducere MikroTik si RouterOS
+
+Modulul 2 – DHCP Server, Client precum si modurile ARP
+
+Modulul 3 – Bridging, descriere concept, inclusiv Wireless Bridge
+
+Modulul 4 – Routing , descriere concept, static routing
+
+Modulul 5 – Wireless, concept a/b/g/n/ac, linkuri simple wlan, ap mode si station mode, unelte pentru monitorizare, access list si connect list.
+
+Modulul 6 – Firewall, principii, Connection tracking si states, structura chainurilor si tipuri de actiuni, address list, source NAT si destination NAT.
+
+Modulul 7 – QoS Despre Simple queues, Target, Destinations, Max-Limit si Limit-at precum si Traffic Bursting, concept PCQ, un singur simple queue pentru intreaga retea.
+
+Modulul 8 – Tunnels PPP settings, IP pool, Secure Local Network, Point-to-Point addresses, Retele remote securizate PPTP client/server, SSTP Client.
+
+Modulul 9 – Unelte ale RouterOS, e-mail, Netwatch, Ping, Traceroute, Profiler. Monitorizare pe interfete, graph-uri, Torch si SNMP, dar si o scurta descriere a The Dude. System Logs si support.
+
+Cerinte Cursanti
+Printre prerechizitele importante ale MTCNA se afla cunostintele temeinice despre TCP/IP si subnetting. Pentru o experienta optima in sala de training virtuala recomandam utilizarea unui laptop (cu webcam) generatie moderna, la care sa aveti un monitor extern atasat si o pereche de casti cu microfon (pentru evitarea ecourilor). Este necesara si o conexiune rapida la internet, cel putin 50 Mbps.
+
+Info
+Acest tip de curs este recomandat inginerilor si tehnicienilor care doresc sa studieze curicula oficiala MTCNA intr-un format 100% online. Agenda cursului cuprinde aceleasi noua module dezvoltate pe durata a 2 zile de curs (nu include si examenul de certificare). Platforma de training online a fost proiectata si realizata in detaliu, pentru a putea reproduce cat mai fidel interactiunea dintre cursanti, ca si cum acestia s-ar afla in sala de training. Cursul include instrumente interactive si sesiuni de laboratoare pe echipamente reale executate in breakout rooms.
+
+Pentru detalii suplimentare referitoare la certificarea MTCNA, va invitam sa consultati curricula oficiala MikroTik la adresa: https://www.mikrotik.com/download/pdf/MTCNA_Outline.pdf."
+
+- MTCRE
+-- "Certificarea MTCRE
+
+MikroTik Certified Routing Engineer (necesita MTCNA valid)
+
+Modulul 1 – Rutare statica , rutare catre ruta cea mai specifica, ECMP, Gateway catre o interfata anume, Route distance si Gateway reachability check, Routing mark si route policy.
+
+Modulul 2 – Adresarea Point2Point
+
+Modulul 3 – VPN concept, tipuri diferite de Virtual Private Networks, Site2Site connectivity folosind Tuneluri IPIP, EoIP, PPTP, SSTP, L2TP, PPPoE. VLAN si moduri de utilizare, Implementari 802.11Q (QinQ)
+
+Modulul 4 – OSPF Cum functioneaza OSPF, Protocolul Hello si LSA-urile explicate precum si Database Distribution, Structura retelei OSPF, starile OSPF neighbors (DR si BDR), etc.
+
+Cerinte Cursanti
+Inscrierea la acest curs este posibila doar in cazul in care detineti certificarea MTCNA valida
+
+Info
+Durata cursului este de 2 zile si este destinata inginerilor si tehnicienilor de retea care doresc sa instaleze si sa administreze retele de calculatoare rutate dinamic sau static. Toate modulele au laboratoare la final. Pentru detalii suplimentare referitoare la certificarea MTCRE, va invitam sa consultati curricula oficiala MikroTik la adresa :http://www.mikrotik.com/download/pdf/MTCRE_Outline.pdf"
+
+- MTCSE
+-- "Certificarea MTCSE
+
+MikroTik Certified Security Engineer (necesita MTCNA activ)
+
+Agenda cursului cuprinde urmatoarele subiecte:
+
+Modulul 1 – Atacuri, mecanisme și servicii, Cele mai frecvente amenințări, Implementarea securității RouterOS, Laborator.
+
+Modulul 2 – Firewall Packet flow, firewall chains, Statefull Firewall, tabelul RAW, Reducerea SYN flood folosind tabelul RAW, Configurația implicită RouterOS, cele mai bune practici pentru Management access, Detectarea unui atac la serviciile critice ale infrastructurii, Bridge filter, Opțiuni avansate în firewall filter, Filtrarea ICMP, Laborator
+
+Modulul 3 – OSI Layer Attacks, Atacurile MNDP si modalitati de preventie, DHCP: rogue servers , DHCP Starvation, atacuri și prevenire TCP SYN, Atacurile UDP si prevenirea acestora, atacurile și prevenirea ICMP Smurf, atacurile și prevenirea bruteforce FTP, telnet și SSH, Detectarea și prevenirea scanării porturilor, Laborator
+
+Modulul 4 – Criptografie, Introducere în criptografie și terminologie, Metode de criptare, Algoritmi – simetrici, asimetrici, Public Key Infrastructure (PKI), Certificate, certificate self-signed, Certificate valabile gratuit, Utilizarea certificatelor în RouterOS, Laborator
+
+Modulul 5 – Securizarea Router OS, port knocking, conexiuni securizate (HTTPS, SSH, WinBox), Porturile implicite pentru servicii, Tunelul prin SSH, Laborator
+
+Modulul 6 – Secure Tunnels, Introducere în IPsec, L2TP + IPsec, SSTP cu certificate, Laborator
+
+Cerinte Cursanti
+Inscrierea la acest curs este posibila doar in cazul in care detineti certificarea MTCNA valida
+
+Info
+Acest curs este destinat inginerilor de retele de calculatoare care doresc sa implementeze si si administreze securitatea retelelor construite cu echipamente MikroTik. Durata cursului este de 2 zile. Toate modulele contin si laboratoare. Pentru detalii suplimentare referitoare la certificarea MTCSE, va invitam sa consultati curricula oficiala MikroTik la adresa https://mikrotik.com/download/pdf/MTCSE_Outline.pdf"
+
+- MTCTCE
+-- "Certificarea MTCTCE
+
+MikroTik Certified Traffic Control Engineer (necesita MTCNA activ)
+
+Agenda cursului cuprinde urmatoarele subiecte:
+
+Studiul Packet Flow Diagram – Concept
+
+Firewall filter/nat/mangle – Connection tracking, Filter cu acoperirea tuturor regulilor de tip action, reguli de tip conditions, NAT helpers, Mangle asemanator cu Filter.
+
+QoS – Hierarchical Token Bucket, HTB informatii generale, implementarea in queue tree, structura HTB, HTB dual si limitari, Prioritati HTB, Burst, tipuri de queue si simple queues.
+
+DNS Client/Cache – Basic configuration si inregistrari DNS de tip static.
+
+DHCP client/relay/server – Analiza comunicarii DHCP, configurarea si identificarea DHCP Client precum si DHCP Server. Retele DHCP si optiunile disponibile, IP Pool, Advanced DHCP. Configurarea tip DHCP Relay.
+
+Web Proxy – Configurare de baza, Proxy rule lists, access list, Direct Access List si Cache List. Expresii regulate.
+
+Cerinte Cursanti
+Inscrierea la acest curs este posibila doar in cazul in care detineti certificarea MTCNA valida
+
+Info
+Cursul este destinat inginerilor de retea si tehnicienilor care doresc sa optimizeze incarcarea si distribuirea traficului folosind Quality of Service. Durata cursului este de 3 zile. Toate modulele contin si laboratoare. Pentru detalii suplimentare referitoare la certificarea MTCTCE, va invitam sa consultati curricula oficiala MikroTik la adresa https://mikrotik.com/download/pdf/MTCTCE_Outline.pdf"
+
+
+

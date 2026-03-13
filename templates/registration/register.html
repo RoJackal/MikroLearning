@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+    /* Force styling on Django's auto-generated inputs */
+    form input {
+        width: 100%;
+        padding: 0.75rem;
+        border-radius: 0.5rem;
+        background-color: #1e293b; /* slate-800 */
+        border: 1px solid #475569; /* slate-600 */
+        color: #f8fafc; /* slate-50 */
+        outline: none;
+        transition: all 0.2s;
+    }
+    form input:focus {
+        border-color: #6366f1; /* primary-500 */
+        ring: 2px;
+        ring-color: #6366f1;
+    }
+</style>
+<div class="max-w-md mx-auto my-10 bg-white dark:bg-slate-800 p-8 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-700">
+    <h2 class="text-3xl font-black text-center text-primary-500 mb-6 uppercase">Create Account</h2>
+    <form method="post" class="space-y-6">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="space-y-2">
+            <label for="{{ field.id_for_label }}" class="block text-sm font-bold text-slate-700 dark:text-slate-200">{{ field.label }}</label>
+            <div>
+                {{ field }}
+            </div>
+            {% if field.errors %}
+            {% for error in field.errors %}
+            <p class="text-red-500 text-xs font-bold mt-1">{{ error }}</p>
+            {% endfor %}
+            {% endif %}
+            {% if field.help_text %}
+            <p class="text-slate-500 text-[10px] leading-tight mt-1">{{ field.help_text|safe }}</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+        <button type="submit" class="w-full bg-primary-500 hover:bg-primary-900 text-white font-black py-4 rounded-lg shadow-lg transition duration-150 transform active:scale-95 uppercase">Sign Up</button>
+    </form>
+    <div class="mt-6 text-center text-sm text-slate-500 dark:text-slate-400">
+        Already have an account? <a href="{% url 'login' %}" class="text-primary-500 hover:underline font-bold">Login here</a>.
+    </div>
+</div>
+{% endblock %}

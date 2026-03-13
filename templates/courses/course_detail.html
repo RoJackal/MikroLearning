@@ -1,39 +1,56 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
-<div class="max-w-4xl mx-auto">
-    <a href="{% url 'course_list' %}" class="text-primary-500 hover:text-primary-900 mb-4 inline-block">&larr; Inapoi la lista</a>
-    <h1 class="text-4xl font-black text-slate-900 dark:text-white mb-4">{{ course.title }}</h1>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div class="md:col-span-2">
-            <h2 class="text-2xl font-bold mb-4 border-b pb-2">Descriere Curs</h2>
-            <p class="whitespace-pre-line text-slate-700 dark:text-slate-300 mb-6">{{ course.description }}</p>
-            <h2 class="text-2xl font-bold mb-4 border-b pb-2">Agenda MTCNA</h2>
-            <ul class="space-y-2 text-slate-700 dark:text-slate-300">
-                <li><strong>Modulul 1:</strong> Introducere MikroTik si RouterOS [cite: 3]</li>
-                <li><strong>Modulul 2:</strong> DHCP Server si Client [cite: 3]</li>
-                <li><strong>Modulul 3:</strong> Bridging Concept [cite: 3]</li>
-                <li><strong>Modulul 4:</strong> Routing si Static Routing [cite: 3]</li>
-                <li><strong>Modulul 5:</strong> Wireless a/b/g/n/ac [cite: 3]</li>
-                <li><strong>Modulul 6:</strong> Firewall si NAT [cite: 3]</li>
-                <li><strong>Modulul 7:</strong> QoS si Simple Queues [cite: 3]</li>
-                <li><strong>Modulul 8:</strong> Tunnels PPP si PPTP [cite: 3]</li>
-                <li><strong>Modulul 9:</strong> Unelte RouterOS si Monitoring [cite: 3]</li>
-            </ul>
+<div class="max-w-5xl mx-auto">
+    <nav class="flex mb-8 text-sm font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">
+        <a href="{% url 'course_list' %}" class="hover:text-primary-500 transition flex items-center">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+            </svg>
+            Back to Courses
+        </a>
+    </nav>
+    {% if user.is_authenticated and user == course.instructor or user.is_superuser %}
+    <div class="flex space-x-3 mb-10">
+        <a href="{% url 'course_edit' course.pk %}" class="bg-indigo-600 hover:bg-indigo-700 text-white font-black py-2 px-6 rounded-lg uppercase text-xs tracking-widest transition shadow-lg">Edit Course</a>
+        <a href="{% url 'course_delete' course.pk %}" class="bg-rose-600 hover:bg-rose-700 text-white font-black py-2 px-6 rounded-lg uppercase text-xs tracking-widest transition shadow-lg">Delete Course</a>
+    </div>
+    {% endif %}
+    <div class="flex flex-col md:flex-row gap-8 mb-10">
+        <div class="w-full md:w-1/3">
+            {% with title=course.title|lower %}
+            <img src="{% static 'img/' %}{% if 'mtcna' in title %}mtcna.png{% elif 'mtcre' in title %}mtcre.png{% elif 'mtcse' in title %}mtcse.png{% elif 'mtctce' in title %}mtctce.png{% else %}default.png{% endif %}" alt="Course Logo" class="w-full h-auto rounded-lg shadow-lg border border-primary-500">
+            {% endwith %}
         </div>
-        <div class="bg-slate-100 dark:bg-slate-700 p-6 rounded-xl h-fit shadow-inner">
-            <p class="text-3xl font-bold text-primary-500 mb-4">{{ course.price }} RON</p>
-            <p class="text-sm mb-2"><strong>Trainer:</strong> {{ course.instructor.username }}</p>
-            <p class="text-sm mb-6"><strong>Perioada:</strong> {{ course.start_date }} - {{ course.end_date }}</p>
-            {% if user.is_authenticated %}
-            <form action="{% url 'course_enroll' %}" method="post">
-                {% csrf_token %}
-                <input type="hidden" name="course" value="{{ course.id }}">
-                <button type="submit" class="w-full bg-primary-500 hover:bg-primary-900 text-white font-bold py-3 rounded-lg transition">Inscrie-te Acum</button>
-            </form>
-            {% else %}
-            <a href="{% url 'login' %}" class="block text-center bg-slate-500 text-white font-bold py-3 rounded-lg">Login pentru Inscriere</a>
-            {% endif %}
+        <div class="flex-1">
+            <h1 class="text-4xl font-black text-slate-900 dark:text-white mb-2">{{ course.title }}</h1>
+            <p class="text-primary-500 font-bold mb-6 italic">Trainer: Daniel Turean</p>
+            <div class="flex space-x-4">
+                <a href="{% static 'pdf/mtcna_outline.pdf' %}" target="_blank" class="bg-slate-700 hover:bg-slate-900 text-white text-sm font-bold py-3 px-6 rounded-lg transition flex items-center shadow-lg">
+                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"></path>
+                    </svg>
+                    Download PDF Outline
+                </a>
+                {% if user.is_authenticated %}
+                <form action="{% url 'course_enroll' course.pk %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="bg-primary-500 hover:bg-primary-600 text-white text-sm font-black py-3 px-6 rounded-lg transition shadow-lg uppercase">Enroll Now</button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="border-t border-slate-700 pt-10">
+        <h2 class="text-2xl font-black text-primary-500 mb-6 uppercase tracking-wider">Course Curriculum & Info</h2>
+        <div class="prose dark:prose-invert max-w-none text-slate-700 dark:text-slate-300 leading-relaxed text-lg">
+            {{ course.description|linebreaksbr }}
+        </div>
+        <div class="mt-12 pt-8 border-t border-slate-700">
+            <a href="{% url 'course_list' %}" class="inline-block bg-primary-500 hover:bg-primary-600 text-white font-black py-4 px-8 rounded-xl transition transform active:scale-95 shadow-lg">
+                GO TO HOME PAGE
+            </a>
         </div>
     </div>
 </div>
-{% endblock %}  
+{% endblock %}

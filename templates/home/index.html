@@ -1,13 +1,33 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1>Welcome to MikroLearning</h1>
-<p>This is your platform for Python courses.</p>
-<h3>Popular Courses:</h3>
-<ul>
-    {% for course in popular_courses %}
-    <li>{{ course.title }} ({{ course.enrollment_count }} students)</li>
-    {% empty %}
-    <li>No courses available yet.</li>
-    {% endfor %}
-</ul>
+<div class="text-center py-12">
+    <h1 class="text-5xl font-black text-primary-500 mb-4 uppercase tracking-tighter">Welcome to MikroLearning</h1>
+    <p class="text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">Your professional platform for Python courses and MikroTik Network Associate certifications[cite: 3, 6].</p>
+    <div class="mt-10 flex justify-center space-x-4">
+        <a href="{% url 'course_list' %}" class="bg-primary-500 hover:bg-primary-900 text-white font-bold py-3 px-8 rounded-lg transition shadow-lg transform hover:scale-105">Browse Courses</a>
+        {% if not user.is_authenticated %}
+        <a href="{% url 'login' %}" class="bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-900 dark:text-white font-bold py-3 px-8 rounded-lg transition">Login</a>
+        {% endif %}
+    </div>
+</div>
+<section class="mt-16">
+    <div class="flex justify-between items-end mb-8 border-b-2 border-primary-500 pb-2">
+        <h2 class="text-3xl font-bold text-slate-900 dark:text-white">Popular Courses</h2>
+        <a href="{% url 'course_list' %}" class="text-primary-500 hover:text-primary-900 font-bold text-sm uppercase">See all courses &rarr;</a>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {% for course in popular_courses %}
+        <div class="bg-slate-100 dark:bg-slate-700 rounded-xl p-6 shadow-md hover:shadow-2xl transition border border-transparent hover:border-primary-500 flex flex-col">
+            <h3 class="text-xl font-bold mb-3 text-primary-500">{{ course.title }} [cite: 6]</h3>
+            <p class="text-sm text-slate-600 dark:text-slate-400 mb-6 flex-grow">{{ course.description|truncatewords:20 }} [cite: 6]</p>
+            <div class="flex justify-between items-center mt-auto pt-4 border-t border-slate-200 dark:border-slate-600">
+                <span class="text-xs font-bold text-slate-500 uppercase tracking-widest">{{ course.enrollment_set.count }} Students [cite: 3]</span>
+                <a href="{% url 'course_detail' course.pk %}" class="bg-primary-500 hover:bg-primary-900 text-white text-xs font-bold py-2 px-4 rounded transition">Details</a>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-span-3 text-center py-10 bg-slate-100 dark:bg-slate-800 rounded-lg italic text-slate-500">No courses are currently available.</div>
+        {% endfor %}
+    </div>
+</section>
 {% endblock %}
