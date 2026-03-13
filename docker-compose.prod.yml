@@ -1,0 +1,30 @@
+services:
+  db:
+    image: mariadb:10.11
+    restart: always
+    environment:
+      MARIADB_DATABASE: mikrolearning
+      MARIADB_USER: mikrolearning
+      MARIADB_PASSWORD: "RealLongPassword#1010"
+      MARIADB_ROOT_PASSWORD: "RealLongRootPassword9898"
+    volumes:
+      - mariadb_prod_data:/var/lib/mysql
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    restart: always
+    environment:
+      - DB_HOST=db
+      - DB_NAME=mikrolearning
+      - DB_USER=mikrolearning
+      - DB_PASS=RealLongPassword#1010
+      - DEBUG=False
+      - SECRET_KEY=django-insecure-your-secret-key-here
+      - ALLOWED_HOSTS=*
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+volumes:
+  mariadb_prod_data:

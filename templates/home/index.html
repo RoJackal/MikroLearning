@@ -1,32 +1,66 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
 <div class="text-center py-12">
     <h1 class="text-5xl font-black text-primary-500 mb-4 uppercase tracking-tighter">Welcome to MikroLearning</h1>
-    <p class="text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">Your professional platform for Python courses and MikroTik Network Associate certifications[cite: 3, 6].</p>
-    <div class="mt-10 flex justify-center space-x-4">
-        <a href="{% url 'course_list' %}" class="bg-primary-500 hover:bg-primary-900 text-white font-bold py-3 px-8 rounded-lg transition shadow-lg transform hover:scale-105">Browse Courses</a>
+    <p class="text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto mb-10">Your professional platform for Python courses and MikroTik Network Associate certifications.</p>
+    <div class="max-w-2xl mx-auto mb-12">
+        <form action="{% url 'course_list' %}" method="get" class="relative group">
+            <input type="text" name="q" value="{{ search_query|default:'' }}" placeholder="Search for MikroTik certifications (MTCNA, MTCRE...)" class="w-full bg-slate-100 dark:bg-slate-700 text-lg border-2 border-slate-200 dark:border-slate-600 rounded-2xl py-5 px-8 focus:outline-none focus:ring-4 focus:ring-primary-500/20 focus:border-primary-500 transition-all shadow-xl dark:text-white">
+            <button type="submit" class="absolute right-4 top-3 bg-primary-500 hover:bg-primary-600 text-white p-3 rounded-xl transition shadow-lg flex items-center">
+                <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+                <span class="font-bold uppercase text-sm tracking-widest">Search</span>
+            </button>
+        </form>
+    </div>
+    <div class="flex justify-center space-x-4">
+        <a href="{% url 'course_list' %}" class="bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-900 dark:text-white font-black py-4 px-10 rounded-xl transition uppercase tracking-widest text-sm shadow-md">Browse All</a>
         {% if not user.is_authenticated %}
-        <a href="{% url 'login' %}" class="bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-900 dark:text-white font-bold py-3 px-8 rounded-lg transition">Login</a>
+        <a href="{% url 'register' %}" class="bg-primary-500 hover:bg-primary-600 text-white font-black py-4 px-10 rounded-xl transition uppercase tracking-widest text-sm shadow-md">Join Now</a>
         {% endif %}
     </div>
 </div>
+<section class="mt-12 mb-16">
+    <div class="flex justify-between items-center mb-8 border-b-2 border-primary-500 pb-2">
+        <h2 class="text-3xl font-black text-slate-900 dark:text-white uppercase tracking-tight">Recent News</h2>
+    </div>
+    <div class="space-y-6">
+        {% for news in news_list|slice:":3" %}
+        <div class="flex items-start space-x-6 bg-slate-50 dark:bg-slate-700/50 p-6 rounded-xl border border-slate-200 dark:border-slate-600 shadow-sm hover:border-primary-500 transition">
+            <div class="flex-shrink-0 w-20 h-20 bg-primary-500 text-white rounded-lg flex flex-col items-center justify-center font-black shadow-inner">
+                <span class="text-2xl">{{ news.created_at|date:"d" }}</span>
+                <span class="text-xs uppercase">{{ news.created_at|date:"M" }}</span>
+            </div>
+            <div class="flex-1">
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">{{ news.title }}</h3>
+                <div class="text-slate-600 dark:text-slate-400 leading-relaxed">{{ news.content|linebreaksbr|truncatewords:50 }}</div>
+                <div class="mt-4 flex items-center space-x-4">
+                    <span class="text-[10px] font-black uppercase tracking-widest bg-slate-200 dark:bg-slate-600 px-2 py-1 rounded text-slate-700 dark:text-slate-200">Official Announcement</span>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="text-center py-10 italic text-slate-500 bg-slate-50 dark:bg-slate-800 rounded-xl">No news available at this time.</div>
+        {% endfor %}
+    </div>
+</section>
 <section class="mt-16">
     <div class="flex justify-between items-end mb-8 border-b-2 border-primary-500 pb-2">
-        <h2 class="text-3xl font-bold text-slate-900 dark:text-white">Popular Courses</h2>
-        <a href="{% url 'course_list' %}" class="text-primary-500 hover:text-primary-900 font-bold text-sm uppercase">See all courses &rarr;</a>
+        <h2 class="text-3xl font-black text-slate-900 dark:text-white uppercase tracking-tight">Certification Tracks</h2>
+        <a href="{% url 'course_list' %}" class="text-primary-500 hover:text-primary-900 font-black text-xs uppercase tracking-widest mb-1">See all courses &rarr;</a>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         {% for course in popular_courses %}
         <div class="bg-slate-100 dark:bg-slate-700 rounded-xl p-6 shadow-md hover:shadow-2xl transition border border-transparent hover:border-primary-500 flex flex-col">
-            <h3 class="text-xl font-bold mb-3 text-primary-500">{{ course.title }} [cite: 6]</h3>
-            <p class="text-sm text-slate-600 dark:text-slate-400 mb-6 flex-grow">{{ course.description|truncatewords:20 }} [cite: 6]</p>
+            <h3 class="text-lg font-black mb-3 text-primary-500 uppercase leading-tight">{{ course.title }}</h3>
+            <div class="text-sm text-slate-600 dark:text-slate-400 mb-6 flex-grow leading-relaxed">{{ course.description|linebreaksbr|truncatewords:20 }}</div>
             <div class="flex justify-between items-center mt-auto pt-4 border-t border-slate-200 dark:border-slate-600">
-                <span class="text-xs font-bold text-slate-500 uppercase tracking-widest">{{ course.enrollment_set.count }} Students [cite: 3]</span>
-                <a href="{% url 'course_detail' course.pk %}" class="bg-primary-500 hover:bg-primary-900 text-white text-xs font-bold py-2 px-4 rounded transition">Details</a>
+                <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest">{{ course.enrollment_set.count }} Students Enrolled</span>
+                <a href="{% url 'course_detail' course.pk %}" class="bg-primary-500 hover:bg-primary-900 text-white text-[10px] font-black py-2 px-4 rounded uppercase transition">Details</a>
             </div>
         </div>
-        {% empty %}
-        <div class="col-span-3 text-center py-10 bg-slate-100 dark:bg-slate-800 rounded-lg italic text-slate-500">No courses are currently available.</div>
         {% endfor %}
     </div>
 </section>

@@ -8,7 +8,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-default-key')
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', '*']
 INSTALLED_APPS = [
 	'django.contrib.admin',
 	'django.contrib.auth',
@@ -21,6 +21,7 @@ INSTALLED_APPS = [
 	]
 MIDDLEWARE = [
 	'django.middleware.security.SecurityMiddleware',
+	'whitenoise.middleware.WhiteNoiseMiddleware',  # Place right below SecurityMiddleware
 	'django.contrib.sessions.middleware.SessionMiddleware',
 	'django.middleware.common.CommonMiddleware',
 	'django.middleware.csrf.CsrfViewMiddleware',
@@ -48,10 +49,12 @@ TEMPLATES = [
 WSGI_APPLICATION = 'MikroLearning.wsgi.application'
 DATABASES = {
 	'default': {
-		'ENGINE':  'django.db.backends.mysql',
-		'OPTIONS': {
-			'read_default_file': str(BASE_DIR / 'my.cnf'),
-			},
+		'ENGINE':   'django.db.backends.mysql',
+		'NAME':     os.environ.get('DB_NAME', 'mikrolearning'),
+		'USER':     os.environ.get('DB_USER', 'mikrolearning'),
+		'PASSWORD': os.environ.get('DB_PASS', 'RealLongPassword#1010'),
+		'HOST':     os.environ.get('DB_HOST', 'db'),
+		'PORT':     '3306',
 		},
 	}
 AUTH_PASSWORD_VALIDATORS = [
@@ -64,8 +67,11 @@ LANGUAGE_CODE = 'en-us'  # Engleza
 TIME_ZONE = 'Europe/Bucharest'
 USE_I18N = True
 USE_TZ = True
-STATIC_URL = '/static/'
+BASE_DIR = Path(__file__).resolve().parent.parent
+STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [BASE_DIR / 'static']
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 # AUTH

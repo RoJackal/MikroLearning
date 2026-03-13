@@ -1,9 +1,10 @@
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.mail import send_mail
 from django.db.models import Count, Q
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 
@@ -15,7 +16,7 @@ class CourseListView(ListView):
 	context_object_name = 'courses'
 	paginate_by = 9
 	def get_queryset( self ):
-		# Changed order_by from '-created_at' to 'id'
+		# Ordonare dupa ID si numarare inscrieri
 		qs = Course.objects.annotate(enrollment_count=Count('enrollment')).order_by('id')
 		query = self.request.GET.get('q', '').strip()
 		if query:
@@ -35,6 +36,7 @@ class CourseDetailView(DetailView):
 		course = self.get_object()
 		context['enrollment_count'] = Enrollment.objects.filter(course=course).count()
 		if self.request.user.is_authenticated:
+			# FIX: Folosim student in loc de user conform modelului tau
 			context['is_enrolled'] = Enrollment.objects.filter(student=self.request.user, course=course).exists()
 			context['is_instructor'] = (course.instructor == self.request.user)
 		else:
@@ -57,7 +59,6 @@ class CourseUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 	success_url = reverse_lazy('course_list')
 	def test_func( self ):
 		course = self.get_object()
-		# Allow access if user is the instructor OR an admin [cite: 2026-01-07]
 		return self.request.user == course.instructor or self.request.user.is_superuser
 class CourseDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 	model = Course
@@ -65,7 +66,6 @@ class CourseDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 	success_url = reverse_lazy('course_list')
 	def test_func( self ):
 		course = self.get_object()
-		# Allow access if user is the instructor OR an admin [cite: 2026-01-07]
 		return self.request.user == course.instructor or self.request.user.is_superuser
 class EnrollmentCreateView(LoginRequiredMixin, CreateView):
 	model = Enrollment
@@ -73,6 +73,7 @@ class EnrollmentCreateView(LoginRequiredMixin, CreateView):
 	success_url = reverse_lazy('course_list')
 	def dispatch( self, request, *args, **kwargs ):
 		self.course = get_object_or_404(Course, pk=kwargs['course_pk'])
+		# FIX: Folosim student in loc de user
 		if Enrollment.objects.filter(student=request.user, course=self.course).exists():
 			messages.warning(request, 'You are already enrolled in this course.')
 			return redirect('course_detail', pk=self.course.pk)
@@ -91,3 +92,24 @@ class RegisterView(CreateView):
 	def form_valid( self, form ):
 		messages.success(self.request, 'Account created! Please login.')
 		return super().form_valid(form)
+def home_index( request ):
+	news_list = News.objects.all().order_by('-created_at')[:5]
+	popular_courses = Course.objects.all().order_by('id')[:5]
+	return render(request, 'home/index.html', { 'news_list': news_list, 'popular_courses': popular_courses })
+class MyCoursesListView(LoginRequiredMixin, ListView):
+	model = Enrollment
+	template_name = 'courses/my_courses.html'
+	context_object_name = 'enrollments'
+	def get_queryset( self ):
+		# FIX: Folosim student in loc de user
+		return Enrollment.objects.filter(student=self.request.user).select_related('course').order_by('course__id')
+@login_required
+def enroll_in_course( request, pk ):
+	course = get_object_or_404(Course, pk=pk)
+	# FIX: Folosim student in loc de user
+	enrollment, created = Enrollment.objects.get_or_create(student=request.user, course=course)
+	if created:
+		messages.success(request, f'You have successfully enrolled in {course.title}!')
+	else:
+		messages.info(request, f'You are already enrolled in {course.title}.')
+	return redirect('course_detail', pk=pk)

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="flex justify-between items-center mb-10 border-b border-primary-500 pb-4">
+    <h1 class="text-3xl font-black text-primary-500 uppercase">My Courses</h1>
+    <a href="{% url 'course_list' %}" class="text-sm font-bold text-slate-400 hover:text-white uppercase tracking-widest transition">Browse More &rarr;</a>
+</div>
+{% if enrollments %}
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    {% for enrollment in enrollments %}
+    <div class="bg-slate-100 dark:bg-slate-700 rounded-xl overflow-hidden shadow-lg border border-slate-200 dark:border-slate-600 flex flex-col">
+        <div class="p-6">
+            <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-4">{{ enrollment.course.title }}</h2>
+            <div class="flex items-center text-xs text-slate-500 dark:text-slate-400 mb-6">
+                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+                Enrolled on: {{ enrollment.date_enrolled|date:"d M Y" }}
+            </div>
+            <a href="{% url 'course_detail' enrollment.course.pk %}" class="block w-full text-center bg-primary-500 hover:bg-primary-600 text-white font-black py-3 rounded-lg uppercase text-xs tracking-widest transition shadow-md">Enter Classroom</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="text-center py-20 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border-2 border-dashed border-slate-700">
+    <p class="text-slate-400 text-xl font-bold mb-6">You haven't enrolled in any courses yet.</p>
+    <a href="{% url 'course_list' %}" class="inline-block bg-primary-500 hover:bg-primary-600 text-white font-black py-4 px-10 rounded-xl transition uppercase tracking-widest">Explore Catalog</a>
+</div>
+{% endif %}
+{% endblock %}

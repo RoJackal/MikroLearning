@@ -22,12 +22,15 @@
 <nav class="bg-slate-800 p-4 text-white shadow-lg border-b border-primary-500">
     <div class="container mx-auto flex flex-wrap justify-between items-center">
         <div class="flex items-center space-x-6">
-            <a href="{% url 'course_list' %}" class="text-2xl font-bold tracking-tight hover:text-primary-500 transition">MikroLearning</a>
+            <a href="{% url 'home' %}" class="text-2xl font-bold tracking-tight hover:text-primary-500 transition">MikroLearning</a>
             <div class="hidden lg:flex items-center space-x-6">
                 <a href="{% url 'course_list' %}" class="hover:text-primary-500 transition font-medium">All Courses</a>
+                {% if user.is_authenticated %}
+                <a href="{% url 'my_courses' %}" class="text-primary-500 hover:text-primary-400 transition font-black uppercase text-xs tracking-widest border-l border-slate-600 pl-6">My Courses</a>
+                {% endif %}
                 <div class="relative group">
                     <button class="flex items-center hover:text-primary-500 transition font-medium focus:outline-none uppercase text-xs tracking-widest">
-                        Our Certifications
+                        Our courses
                         <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
@@ -37,27 +40,15 @@
                         <a href="{% url 'course_detail' course.pk %}" class="block px-4 py-3 text-sm hover:bg-primary-500 hover:text-white transition border-b border-slate-600 last:border-0 first:rounded-t-lg last:rounded-b-lg">
                             {{ course.title }}
                         </a>
-                        {% empty %}
-                        <span class="block px-4 py-3 text-sm text-slate-400 italic">No courses available</span>
                         {% endfor %}
                     </div>
                 </div>
-                {% if user.is_authenticated %}
-                <a href="{% url 'course_add' %}" class="hover:text-primary-500 transition font-medium">Add Course</a>
+                {% if user.is_superuser %}
+                <a href="/admin/auth/user/" class="text-yellow-500 hover:text-yellow-400 transition font-black uppercase text-xs tracking-widest">Users / Trainers</a>
                 {% endif %}
             </div>
         </div>
-        <div class="flex-1 max-w-md mx-8 hidden md:block">
-            <form action="{% url 'course_list' %}" method="get" class="relative">
-                <input type="text" name="q" value="{{ search_query|default:'' }}" placeholder="Search courses..." class="w-full bg-slate-700 text-sm border border-slate-600 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-primary-500 transition">
-                <button type="submit" class="absolute right-3 top-2 text-slate-400 hover:text-white">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                    </svg>
-                </button>
-            </form>
-        </div>
-        <div class="flex items-center space-x-3">
+        <div class="flex items-center space-x-4">
             {% if user.is_authenticated %}
             <span class="text-slate-300 text-sm hidden xl:block italic">Logged in as <strong class="text-white">{{ user.username }}</strong></span>
             <form action="{% url 'logout' %}" method="post" class="inline">
@@ -65,13 +56,27 @@
                 <button type="submit" class="bg-red-600 hover:bg-red-700 text-white text-xs font-black py-2 px-4 rounded uppercase transition">Logout</button>
             </form>
             {% else %}
-            <a href="{% url 'login' %}" class="text-sm font-bold hover:text-primary-500 transition">Login</a>
-            <a href="{% url 'register' %}" class="bg-primary-500 hover:bg-primary-600 text-white text-sm font-black py-2 px-4 rounded uppercase transition">Sign Up</a>
+            <div class="flex items-center space-x-4">
+                <a href="{% url 'login' %}" class="text-sm font-bold hover:text-primary-500 transition">Login</a>
+                <a href="{% url 'register' %}" class="bg-primary-500 hover:bg-primary-600 text-white text-sm font-black py-2 px-4 rounded uppercase transition">Sign Up</a>
+            </div>
             {% endif %}
         </div>
     </div>
 </nav>
 <main class="container mx-auto py-10 px-6">
+    {% if messages %}
+    <div class="mb-6 space-y-3">
+        {% for message in messages %}
+        <div class="p-4 rounded-xl font-black uppercase text-[10px] tracking-[0.2em] shadow-xl flex items-center {% if message.tags == 'success' %}bg-green-600 text-white border-l-8 border-green-400{% elif message.tags == 'error' %}bg-rose-600 text-white border-l-8 border-rose-400{% else %}bg-indigo-600 text-white border-l-8 border-indigo-400{% endif %}">
+            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
     <div class="bg-white dark:bg-slate-800 rounded-xl shadow-xl p-8 border border-slate-200 dark:border-slate-700">
         {% block content %}{% endblock %}
     </div>
