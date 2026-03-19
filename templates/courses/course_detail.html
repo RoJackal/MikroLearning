@@ -24,23 +24,27 @@
         </div>
         <div class="flex-1">
             <h1 class="text-4xl font-black text-slate-900 dark:text-white mb-2">{{ course.title }}</h1>
-            <p class="text-primary-500 font-bold mb-6 italic">Trainer: Daniel Turean</p>
-            <div class="flex space-x-4">
-                <a href="{% static 'pdf/mtcna_outline.pdf' %}" target="_blank" class="bg-slate-700 hover:bg-slate-900 text-white text-sm font-bold py-3 px-6 rounded-lg transition flex items-center shadow-lg">
+            <p class="text-primary-500 font-bold mb-6 italic">Trainer: {{ course.instructor.get_full_name|default:course.instructor.username }}</p>
+            <div class="flex flex-wrap gap-4">
+                {% if course.materials %}
+                <a href="{{ course.materials.url }}" target="_blank" class="bg-slate-700 hover:bg-slate-900 text-white text-sm font-bold py-3 px-6 rounded-lg transition flex items-center shadow-lg">
                     <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"></path>
                     </svg>
                     Download Outline
                 </a>
+                {% endif %}
                 {% if user.is_authenticated %}
                 {% if is_enrolled %}
-                <a href="#" class="bg-green-600 hover:bg-green-700 text-white text-sm font-black py-3 px-6 rounded-lg transition shadow-lg uppercase">Already Enrolled</a>
+                <button disabled class="bg-green-600/50 text-white text-sm font-black py-3 px-6 rounded-lg shadow-lg uppercase cursor-not-allowed">Already Enrolled</button>
                 {% else %}
                 <form action="{% url 'course_enroll' course.pk %}" method="post">
                     {% csrf_token %}
                     <button type="submit" class="bg-primary-500 hover:bg-primary-600 text-white text-sm font-black py-3 px-6 rounded-lg transition shadow-lg uppercase">Enroll Now</button>
                 </form>
                 {% endif %}
+                {% else %}
+                <a href="{% url 'login' %}" class="bg-primary-500 hover:bg-primary-600 text-white text-sm font-black py-3 px-6 rounded-lg transition shadow-lg uppercase">Login to Enroll</a>
                 {% endif %}
             </div>
         </div>

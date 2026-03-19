@@ -1,5 +1,4 @@
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.mail import send_mail
@@ -8,7 +7,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 
-from .forms import CourseForm
+from .forms import CourseForm, EnrollmentForm
 from .models import Course, Enrollment, News
 class CourseListView(ListView):
 	model = Course
@@ -16,7 +15,6 @@ class CourseListView(ListView):
 	context_object_name = 'courses'
 	paginate_by = 9
 	def get_queryset( self ):
-		# Ordonare dupa ID si numarare inscrieri
 		qs = Course.objects.annotate(enrollment_count=Count('enrollment')).order_by('id')
 		query = self.request.GET.get('q', '').strip()
 		if query:
@@ -36,7 +34,6 @@ class CourseDetailView(DetailView):
 		course = self.get_object()
 		context['enrollment_count'] = Enrollment.objects.filter(course=course).count()
 		if self.request.user.is_authenticated:
-			# FIX: Folosim student in loc de user conform modelului tau
 			context['is_enrolled'] = Enrollment.objects.filter(student=self.request.user, course=course).exists()
 			context['is_instructor'] = (course.instructor == self.request.user)
 		else:
@@ -69,22 +66,26 @@ class CourseDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 		return self.request.user == course.instructor or self.request.user.is_superuser
 class EnrollmentCreateView(LoginRequiredMixin, CreateView):
 	model = Enrollment
-	fields = []
-	success_url = reverse_lazy('course_list')
-	def dispatch( self, request, *args, **kwargs ):
-		self.course = get_object_or_404(Course, pk=kwargs['course_pk'])
-		# FIX: Folosim student in loc de user
-		if Enrollment.objects.filter(student=request.user, course=self.course).exists():
-			messages.warning(request, 'You are already enrolled in this course.')
-			return redirect('course_detail', pk=self.course.pk)
-		return super().dispatch(request, *args, **kwargs)
+	form_class = EnrollmentForm
+	template_name = 'courses/course_detail.html'
+	def get_form_kwargs( self ):
+		kwargs = super().get_form_kwargs()
+		kwargs['course'] = get_object_or_404(Course, pk=self.kwargs['course_pk'])
+		kwargs['student'] = self.request.user
+		return kwargs
 	def form_valid( self, form ):
+		course = get_object_or_404(Course, pk=self.kwargs['course_pk'])
 		form.instance.student = self.request.user
-		form.instance.course = self.course
+		form.instance.course = course
 		response = super().form_valid(form)
-		send_mail('Enrollment Confirmation', f'Hi {self.request.user.username}, you enrolled in "{self.course.title}".', 'noreply@mikrolearning.com', [self.request.user.email], fail_silently=True)
-		messages.success(self.request, f'Enrolled in "{self.course.title}"! Confirmation email sent.')
+		send_mail('Enrollment Confirmation', f'Hi {self.request.user.username}, you enrolled in "{course.title}".', 'noreply@mikrolearning.com', [self.request.user.email], fail_silently=True)
+		messages.success(self.request, f'Enrolled in "{course.title}"! Confirmation email sent.')
 		return response
+	def form_invalid( self, form ):
+		messages.warning(self.request, form.errors.get('__all__', 'Enrollment failed.'))
+		return redirect('course_detail', pk=self.kwargs['course_pk'])
+	def get_success_url( self ):
+		return reverse_lazy('course_detail', kwargs={ 'pk': self.kwargs['course_pk'] })
 class RegisterView(CreateView):
 	template_name = 'registration/register.html'
 	form_class = UserCreationForm
@@ -101,15 +102,4 @@ class MyCoursesListView(LoginRequiredMixin, ListView):
 	template_name = 'courses/my_courses.html'
 	context_object_name = 'enrollments'
 	def get_queryset( self ):
-		# FIX: Folosim student in loc de user
 		return Enrollment.objects.filter(student=self.request.user).select_related('course').order_by('course__id')
-@login_required
-def enroll_in_course( request, pk ):
-	course = get_object_or_404(Course, pk=pk)
-	# FIX: Folosim student in loc de user
-	enrollment, created = Enrollment.objects.get_or_create(student=request.user, course=course)
-	if created:
-		messages.success(request, f'You have successfully enrolled in {course.title}!')
-	else:
-		messages.info(request, f'You are already enrolled in {course.title}.')
-	return redirect('course_detail', pk=pk)

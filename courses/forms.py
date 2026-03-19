@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Course
+from .models import Course, Enrollment
 class CourseForm(forms.ModelForm):
 	class Meta:
 		model = Course
@@ -18,6 +18,23 @@ class CourseForm(forms.ModelForm):
 		cleaned_data = super().clean()
 		start = cleaned_data.get("start_date")
 		end = cleaned_data.get("end_date")
+		price = cleaned_data.get("price")
 		if start and end and end < start:
 			raise forms.ValidationError("End date cannot be earlier than start date.")
+		if price is not None and price < 0:
+			raise forms.ValidationError("The price must be a positive value.")
+		return cleaned_data
+class EnrollmentForm(forms.ModelForm):
+	class Meta:
+		model = Enrollment
+		fields = []
+	
+	def __init__( self, *args, **kwargs ):
+		self.student = kwargs.pop('student', None)
+		self.course = kwargs.pop('course', None)
+		super().__init__(*args, **kwargs)
+	def clean( self ):
+		cleaned_data = super().clean()
+		if Enrollment.objects.filter(student=self.student, course=self.course).exists():
+			raise forms.ValidationError("You are already enrolled in this course.")
 		return cleaned_data
